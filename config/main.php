@@ -16,7 +16,7 @@ return [
 	'aliases' => [
 		'@bower' => '@vendor/bower-asset',
 		'@npm' => '@vendor/npm-asset',
-		'upload' => '@app/upload',
+		'@upload' => '@app/upload',
 	],
 	'components' => [
 		'cache' => [
@@ -72,7 +72,10 @@ return [
         ],
         'transaksi' => [
             'class' => 'app\modules\transaksi\transaksi',
-        ],				
+        ],	
+        'laporan' => [
+            'class' => 'app\modules\laporan\module',
+        ],					
 	],
     // this class use for force login to all controller. Usefull quiet enough
     // this function work only in login placed in site controller. FOr other login controller/action, change denyCallback access

@@ -127,7 +127,7 @@ class PpmController extends Controller
                     // $ext = explode(".", $upload->name);
                     // $ext = end($ext);
                     $model->files = $upload->name;
-                    $path = Yii::getAlias('upload') . '/' . $model->puud.'/'.$model->files;
+                    $path = Yii::getAlias('@upload') . '/' . $model->puud.'/'.$model->files;
                 }                
                 if($model->save()){
                     IF($upload) $upload->saveAs($path);
@@ -156,6 +156,13 @@ class PpmController extends Controller
             *   Process for non-ajax request
             */
             if ($model->load($request->post())) {
+                $upload = UploadedFile::getInstance($model, 'upload');
+                IF($upload){
+                    // $ext = explode(".", $upload->name);
+                    // $ext = end($ext);
+                    $model->files = $upload->name;
+                    $path = Yii::getAlias('@upload') . '/' . $model->puud.'/'.$model->files;
+                }                  
                 if($model->save()){
                     IF($upload) $upload->saveAs($path);
                 }
@@ -196,16 +203,30 @@ class PpmController extends Controller
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                                 Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
                 ];         
-            }else if($model->load($request->post()) && $model->save()){
-                return [
-                    'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "Ppud #".$id,
-                    'content'=>$this->renderAjax('view', [
-                        'model' => $model,
-                    ]),
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                            Html::a('Edit',['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
-                ];    
+            }else if($model->load($request->post())){
+                IF($model->files) $oldFile = Yii::getAlias('@upload') . '/' . $model->puud.'/'.$model->files;
+                $upload = UploadedFile::getInstance($model, 'upload');
+                IF($upload){
+                    // $ext = explode(".", $upload->name);
+                    // $ext = end($ext);
+                    $model->files = $upload->name;
+                    $path = Yii::getAlias('@upload') . '/' . $model->puud.'/'.$model->files;
+                    IF($oldFile) {
+                        if($path != $oldFile) unlink($oldFile);
+                    }
+                }  
+                IF($model->save()){
+                    IF($upload) $upload->saveAs($path);
+                    return [
+                        'forceReload'=>'#crud-datatable-pjax',
+                        'title'=> "Ppud #".$id,
+                        'content'=>$this->renderAjax('view', [
+                            'model' => $model,
+                        ]),
+                        'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                                Html::a('Edit',['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
+                    ];
+                }
             }else{
                  return [
                     'title'=> "Update Ppud #".$id,
@@ -221,6 +242,17 @@ class PpmController extends Controller
             *   Process for non-ajax request
             */
             if ($model->load($request->post())) {
+                IF($model->files) $oldFile = Yii::getAlias('@upload') . '/' . $model->puud.'/'.$model->files;
+                $upload = UploadedFile::getInstance($model, 'upload');
+                IF($upload){
+                    // $ext = explode(".", $upload->name);
+                    // $ext = end($ext);
+                    $model->files = $upload->name;
+                    $path = Yii::getAlias('@upload') . '/' . $model->puud.'/'.$model->files;
+                    IF($oldFile) {
+                        if($path != $oldFile) unlink($oldFile);
+                    }
+                }  
                 if($model->save()){
                     IF($upload) $upload->saveAs($path);
                 }
@@ -242,7 +274,12 @@ class PpmController extends Controller
     public function actionDelete($id)
     {
         $request = Yii::$app->request;
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id); 
+        $path = Yii::getAlias('@upload') . '/' . $model->puud.'/'.$model->files;
+        $model->delete();
+        IF(!@unlink($path)){
+            die('Couldn\'t delete file. It didnt exist!');
+        }
 
         if($request->isAjax){
             /*
@@ -274,6 +311,8 @@ class PpmController extends Controller
         foreach ( $pks as $pk ) {
             $model = $this->findModel($pk);
             $model->delete();
+            $path = Yii::getAlias('@upload') . '/' . $model->puud.'/'.$model->files;
+            unlink($path);
         }
 
         if($request->isAjax){

@@ -52,6 +52,9 @@ class Ppud extends \yii\db\ActiveRecord
             [['puud'], 'exist', 'skipOnError' => true, 'targetClass' => Puus::className(), 'targetAttribute' => ['puud' => 'id']],
             [['upload'], 'safe'],
             [['upload'], 'file', 'extensions'=>'jpg, gif, png, pdf, ppt, pptx, doc, docx, xls, xlsx, avi, mp4', 'maxFiles' => 1, 'maxSize' => 5000000],
+            [['upload'], 'unique', 'targetAttribute' => 'files'
+                // , 'message' => 'File with this name already exist. Change filename or choose another file!'
+            ],
         ];
     }
 
