@@ -45,6 +45,14 @@ return [
 			],
 			require(__DIR__ . '/db-local.php')
 		),
+		'dbsispedap' => \yii\helpers\ArrayHelper::merge(
+			[
+				'class' => 'yii\db\Connection',
+				'charset' => 'utf8',
+				'enableSchemaCache' => true,
+			],
+			require(__DIR__ . '/db-sispedap-local.php')
+		),		
 		'urlManager' => [
 			'enablePrettyUrl' => true,
 			'showScriptName' => false,
