@@ -21,7 +21,7 @@ use kartik\date\DatePicker;
             'options' => ['placeholder' => 'Select date ...'],
             'type' => DatePicker::TYPE_INPUT,
             'pluginOptions' => [
-                'format' => 'yyyy-MM-dd',
+                'format' => 'yyyy-mm-dd',
                 'todayHighlight' => true,
                 'autoclose'=>true
             ]

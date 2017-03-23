@@ -16,7 +16,7 @@ return [
 	'aliases' => [
 		'@bower' => '@vendor/bower-asset',
 		'@npm' => '@vendor/npm-asset',
-		'@upload' => '@app/upload',
+		'upload' => '@app/upload',
 	],
 	'components' => [
 		'cache' => [
@@ -52,7 +52,7 @@ return [
 			],
 		],
 		'assetManager' => [
-			'linkAssets' => true,
+			'linkAssets' => false,
 		],
 	],
 	'modules' => [
@@ -76,21 +76,21 @@ return [
 	],
     // this class use for force login to all controller. Usefull quiet enough
     // this function work only in login placed in site controller. FOr other login controller/action, change denyCallback access
-	'as beforeRequest' => [
-			    'class' => 'yii\filters\AccessControl',
-			    'rules' => [
-			        [
-			            'allow' => true,
-			            'actions' => ['login'],
-			        ],
-			        [
-			            'allow' => true,
-			            'roles' => ['@'],
-			        ],
-			    ],
-			    'denyCallback' => function () {
-			        return Yii::$app->response->redirect(['site/login']);
-			    },
-			],	
+	// 'as beforeRequest' => [
+	// 		    'class' => 'yii\filters\AccessControl',
+	// 		    'rules' => [
+	// 		        [
+	// 		            'allow' => true,
+	// 		            'actions' => ['login'],
+	// 		        ],
+	// 		        [
+	// 		            'allow' => true,
+	// 		            'roles' => ['@'],
+	// 		        ],
+	// 		    ],
+	// 		    'denyCallback' => function () {
+	// 		        return Yii::$app->response->redirect(['site/login']);
+	// 		    },
+	// 		],	
 	'params' => require(__DIR__ . '/params.php'),
 ];

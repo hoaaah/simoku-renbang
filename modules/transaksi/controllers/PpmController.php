@@ -129,7 +129,7 @@ class PpmController extends Controller
                     $model->files = $upload->name;
                     $path = Yii::getAlias('upload') . '/' . $model->puud.'/'.$model->files;
                 }                
-                if($model->save){
+                if($model->save()){
                     IF($upload) $upload->saveAs($path);
                     return [
                         'forceReload'=>'#crud-datatable-pjax',
@@ -155,7 +155,10 @@ class PpmController extends Controller
             /*
             *   Process for non-ajax request
             */
-            if ($model->load($request->post()) && $model->save()) {
+            if ($model->load($request->post())) {
+                if($model->save()){
+                    IF($upload) $upload->saveAs($path);
+                }
                 return $this->redirect(['view', 'id' => $model->id]);
             } else {
                 return $this->render('create', [
@@ -217,8 +220,10 @@ class PpmController extends Controller
             /*
             *   Process for non-ajax request
             */
-            if ($model->load($request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load($request->post())) {
+                if($model->save()){
+                    IF($upload) $upload->saveAs($path);
+                }
             } else {
                 return $this->render('update', [
                     'model' => $model,
