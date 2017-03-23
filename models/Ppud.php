@@ -41,7 +41,7 @@ class Ppud extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['puud', 'no', 'tahun', 'tentang', 'tag', 'files', 'tetap_province', 'tetap_kabkot', 'tetap_tanggal', 'user_id', 'created', 'updated'], 'required'],
+            [['puud', 'no', 'tahun', 'tentang'], 'required'],
             [['puud', 'puuddetail', 'tetap_province', 'user_id'], 'integer'],
             [['tahun'], 'number'],
             [['tetap_tanggal', 'created', 'updated'], 'safe'],
@@ -51,7 +51,10 @@ class Ppud extends \yii\db\ActiveRecord
             [['puud', 'tahun', 'no'], 'unique', 'targetAttribute' => ['puud', 'tahun', 'no'], 'message' => 'The combination of Puud, No and Tahun has already been taken.'],
             [['puud'], 'exist', 'skipOnError' => true, 'targetClass' => Puus::className(), 'targetAttribute' => ['puud' => 'id']],
             [['upload'], 'safe'],
-            [['upload'], 'file', 'extensions'=>'jpg, gif, png', 'maxFiles' => 1, 'maxSize' => 500000],
+            [['upload'], 'file', 'extensions'=>'jpg, gif, png, pdf, ppt, pptx, doc, docx, xls, xlsx, avi, mp4', 'maxFiles' => 1, 'maxSize' => 5000000],
+            [['upload'], 'unique', 'targetAttribute' => 'files'
+                // , 'message' => 'File with this name already exist. Change filename or choose another file!'
+            ],
         ];
     }
 
@@ -82,8 +85,12 @@ class Ppud extends \yii\db\ActiveRecord
     public function behaviors()
     {
         return [
-            TimestampBehavior::className(),
-            // BlameableBehavior::className(),
+            'timestamp' => [
+                'class' => 'yii\behaviors\TimestampBehavior',
+                'createdAtAttribute' => 'created',
+                'updatedAtAttribute' => 'updated',
+                'value' => new \yii\db\Expression('NOW()'),
+            ],
         ];
     }    
 

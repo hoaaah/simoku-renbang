@@ -15,7 +15,6 @@ $this->params['breadcrumbs'][] = 'Transaksi';
 $this->params['breadcrumbs'][] = $this->title;
 
 CrudAsset::register($this);
-echo \Yii::getAlias('@upload');
 ?>
 <div class="ppud-index">
     <div id="ajaxCrudDatatable">

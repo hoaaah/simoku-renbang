@@ -8,6 +8,6 @@
 return [
 	'adminEmail' => 'admin@example.com',
 	// 'uploadPath' => \Yii::getAlias('@upload').'\upload\\',
-	'accessibleStaticContentUrl' => 'http://localhost:8000/ppm/upload/',
+	'accessibleStaticContentUrl' => 'http://localhost:8000/simoku/upload/',
 	'id_ppm' => 19,
 ];

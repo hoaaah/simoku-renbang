@@ -35,12 +35,18 @@ use wahyugnc\pdfjs\ViewerPDF;
     $ext = end($ext);
     IF($ext == 'pdf' || $ext == 'PDF'){
         echo \yii2assets\pdfjs\PdfJs::widget([
-            'url' => Yii::$app->params['accessibleStaticContentUrl'].'/'.$model->puud.'/'.$model->files,
+            'url' => str_replace(' ', '%20',Yii::$app->params['accessibleStaticContentUrl'].$model->puud.'/'.$model->files),
             'width' => '100%',
             'height' => '800px',
-        ]); 
+        ]);
+    }ELSEIF(in_array($ext, ['jpg', 'gif', 'png'])){
+        echo Html::img(Yii::$app->params['accessibleStaticContentUrl'].$model->puud.'/'.$model->files, [
+            'class'=>'img-thumbnail', 
+            'alt'=> $model->tentang, 
+            'title'=> $model->tentang,
+        ]);
     }ELSE{
-        echo Html::a('<i class="glyphicon glyphicon-download"></i> Download', Yii::$app->params['accessibleStaticContentUrl'].'/'.$model->puud.'/'.$model->files, [
+        echo Html::a('<i class="glyphicon glyphicon-download"></i> Download', Yii::$app->params['accessibleStaticContentUrl'].$model->puud.'/'.$model->files, [
             'class' => 'btn btn-lg btn-success',
         ]);
     }
