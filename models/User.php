@@ -29,8 +29,40 @@ class User extends ActiveRecord implements IdentityInterface {
         return '{{%user}}';
     }
 
+    public $password;
+    public $skpd;
+    public $passwordlama;
+
+    public function rules()
+    {
+        return [
+            ['username', 'filter', 'filter' => 'trim'],
+            ['username', 'required'],
+            ['username', 'string', 'min' => 2, 'max' => 255],
+            ['username', 'unique', 
+                'message' => Yii::t('app', 'This username has already been taken.')],
+
+            ['email', 'filter', 'filter' => 'trim'],
+            ['email', 'required'],
+            ['email', 'email'],
+            ['email', 'string', 'max' => 255],
+            //['email', 'unique', 'message' => Yii::t('app', 'This email address has already been taken.')],
+
+            // password field is required on 'create' scenario
+            ['password', 'required', 'on' => 'create'],
+            [['status', 'group_id'], 'integer'],
+            [['passwordlama', 'kode_unit'], 'string' ],
+            ['skpd', 'string'],
+            ['status', 'required'],
+            ['status', 'default', 'value' => self::STATUS_ACTIVE],
+            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],            
+        ];
+    }
+
     /**
-     * @inheritdoc
+     * Returns a list of behaviors that this component should behave as.
+     *
+     * @return array
      */
     public function behaviors()
     {
@@ -40,19 +72,35 @@ class User extends ActiveRecord implements IdentityInterface {
     }
 
     /**
-     * @inheritdoc
+     * Returns the attribute labels.
+     *
+     * @return array
      */
-    public function rules()
+    public function attributeLabels()
     {
         return [
-            ['status', 'default', 'value' => self::STATUS_ACTIVE],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+            'id' => Yii::t('app', 'ID'),
+            'username' => Yii::t('app', 'Username'),
+            'password' => Yii::t('app', 'Password'),
+            'email' => Yii::t('app', 'Email'),
+            'status' => Yii::t('app', 'Status'),
+            'created_at' => Yii::t('app', 'Created At'),
+            'updated_at' => Yii::t('app', 'Updated At'),
+            'kode_unit' => 'Unit Organisasi',
+            'group_id' => 'Jenis User',        
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
+    public function getUnit()
+    {
+        return $this->hasOne(\app\models\RefUnitOrganisasi::className(), ['kode_unit' => 'kode_unit']);
+    }    
+
+    public function getGroup()
+    {
+        return $this->hasOne(\app\models\Groups::className(), ['id' => 'group_id']);
+    }        
+
     public static function findIdentity($id)
     {
         return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);

@@ -21,11 +21,11 @@ use yii\helpers\ArrayHelper;
                     'allowClear' => true
                 ],
             ]);
-    ?>  
+    ?>
 
     <?php 
             echo $form->field($model, 'pegawai_id')->widget(Select2::classname(), [
-                'data' => ArrayHelper::map(\app\models\RefPegawai::find()->all(),'id','name'),
+                'data' => ArrayHelper::map(\app\models\Pegawai::find()->where(['s_kd_instansiunitorg' => '07001500001100'])->all(),'niplama','namaNip'),
                 'options' => ['placeholder' => 'Pilih Pegawai ...'],
                 'pluginOptions' => [
                     'allowClear' => true

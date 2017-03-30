@@ -10,10 +10,6 @@ use johnitvn\ajaxcrud\CrudAsset;
 use johnitvn\ajaxcrud\BulkButtonWidget;
 use yii\helpers\Url;
 
-/* @var $this yii\web\View */
-/* @var $searchModel backend\models\CompanySearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
-
 $this->title = 'Peserta PPM No '.$model->no;
 $this->params['breadcrumbs'][] = 'Transaksi';
 $this->params['breadcrumbs'][] = ['label' => 'PPM', 'url' => ['/transaksi/ppm']];

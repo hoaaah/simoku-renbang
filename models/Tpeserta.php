@@ -32,8 +32,8 @@ class Tpeserta extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['ppm_id', 'pegawai_id', 'peran_id'], 'integer'],
-            [['keterangan'], 'string', 'max' => 255],
+            [['ppm_id', 'peran_id'], 'integer'],
+            [['keterangan', 'pegawai_id'], 'string', 'max' => 255],
             [['peran_id'], 'exist', 'skipOnError' => true, 'targetClass' => RperanPpm::className(), 'targetAttribute' => ['peran_id' => 'id']],
             [['pegawai_id'], 'exist', 'skipOnError' => true, 'targetClass' => RefPegawai::className(), 'targetAttribute' => ['pegawai_id' => 'id']],
         ];
@@ -66,6 +66,6 @@ class Tpeserta extends \yii\db\ActiveRecord
      */
     public function getPegawai()
     {
-        return $this->hasOne(RefPegawai::className(), ['id' => 'pegawai_id']);
+        return $this->hasOne(Pegawai::className(), ['niplama' => 'pegawai_id']);
     }
 }

@@ -58,7 +58,7 @@ class MainMenu extends Widget {
 					['label' => 'Peran PPM', 'url' => ['/parameter/peran']],
 					// ['label' => 'Location', 'url' => ['/location']],
 					// ['label' => 'News and Articles', 'url' => ['/articles']],
-					['label' => 'About', 'url' => '#' ],
+					['label' => 'User', 'url' => ['/parameter/user'] ],
 				]
 			];
 
