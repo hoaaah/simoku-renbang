@@ -13,7 +13,7 @@ return [
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'pegawai.name',
+        'attribute'=>'pegawai.s_nama_lengkap',
     ],
     [
         'class'=>'\kartik\grid\DataColumn',

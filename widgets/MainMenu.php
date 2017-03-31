@@ -92,7 +92,7 @@ class MainMenu extends Widget {
 
 			$items[] = ['label' => 'Laporan', 
 				'items' => [
-					['label' => 'Laporan Unit', 'url' => ['/portofolio'], 'visible' => $this->visibility(4)],
+					['label' => 'Laporan Unit', 'url' => ['/laporan/pelaporanunit'], 'visible' => $this->visibility(4)],
 					['label' => 'Laporan Kompilasi', 'url' => '#', 'visible' => $this->visibility(3)],
 			]];	
 			$items[] = Html::tag('li', $this->getLogoutButton());					

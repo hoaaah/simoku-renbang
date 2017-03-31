@@ -34,8 +34,8 @@ class Tpeserta extends \yii\db\ActiveRecord
         return [
             [['ppm_id', 'peran_id'], 'integer'],
             [['keterangan', 'pegawai_id'], 'string', 'max' => 255],
-            [['peran_id'], 'exist', 'skipOnError' => true, 'targetClass' => RperanPpm::className(), 'targetAttribute' => ['peran_id' => 'id']],
-            [['pegawai_id'], 'exist', 'skipOnError' => true, 'targetClass' => RefPegawai::className(), 'targetAttribute' => ['pegawai_id' => 'id']],
+            // [['peran_id'], 'exist', 'skipOnError' => true, 'targetClass' => RperanPpm::className(), 'targetAttribute' => ['peran_id' => 'id']],
+            // [['pegawai_id'], 'exist', 'skipOnError' => true, 'targetClass' => RefPegawai::className(), 'targetAttribute' => ['pegawai_id' => 'id']],
         ];
     }
 
@@ -68,4 +68,9 @@ class Tpeserta extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Pegawai::className(), ['niplama' => 'pegawai_id']);
     }
+
+    public function getPpm()
+    {
+        return $this->hasOne(\app\models\Ppud::className(), ['id' => 'ppm_id']);
+    }    
 }
