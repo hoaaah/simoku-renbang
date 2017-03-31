@@ -4,10 +4,10 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model app\models\RefBidang */
+/* @var $model app\models\RefUnitOrganisasi */
 
 ?>
-<div class="ref-bidang-create">
+<div class="ref-unit-organisasi-create">
     <?= $this->render('_form', [
         'model' => $model,
     ]) ?>

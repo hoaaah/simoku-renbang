@@ -10,17 +10,13 @@ return [
         'class' => 'kartik\grid\SerialColumn',
         'width' => '30px',
     ],
-        // [
-        // 'class'=>'\kartik\grid\DataColumn',
-        // 'attribute'=>'id',
-    // ],
-    [
+        [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'name',
+        'attribute'=>'kode_unit',
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'keterangan',
+        'attribute'=>'nama_unit',
     ],
     [
         'class' => 'kartik\grid\ActionColumn',

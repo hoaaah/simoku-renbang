@@ -3,22 +3,22 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\RefBidang */
+/* @var $model app\models\RefUnitOrganisasi */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="ref-bidang-form">
+<div class="ref-unit-organisasi-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'kode_unit')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'keterangan')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'nama_unit')->textInput(['maxlength' => true]) ?>
 
   
 	<?php if (!Yii::$app->request->isAjax){ ?>
 	  	<div class="form-group">
-	        <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+	        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
 	    </div>
 	<?php } ?>
 

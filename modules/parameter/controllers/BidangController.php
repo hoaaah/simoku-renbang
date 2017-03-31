@@ -3,8 +3,8 @@
 namespace app\modules\parameter\controllers;
 
 use Yii;
-use app\models\RefBidang;
-use app\modules\parameter\models\RefBidangSearch;
+use app\models\RefUnitOrganisasi;
+use app\modules\parameter\models\RefUnitOrganisasiSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -12,7 +12,7 @@ use \yii\web\Response;
 use yii\helpers\Html;
 
 /**
- * BidangController implements the CRUD actions for RefBidang model.
+ * BidangController implements the CRUD actions for RefUnitOrganisasi model.
  */
 class BidangController extends Controller
 {
@@ -33,12 +33,15 @@ class BidangController extends Controller
     }
 
     /**
-     * Lists all RefBidang models.
+     * Lists all RefUnitOrganisasi models.
      * @return mixed
      */
     public function actionIndex()
     {    
-        $searchModel = new RefBidangSearch();
+        if(!$this->cekAkses()){          
+            throw new NotFoundHttpException('You don\'t have access.');
+        }
+        $searchModel = new RefUnitOrganisasiSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -49,17 +52,20 @@ class BidangController extends Controller
 
 
     /**
-     * Displays a single RefBidang model.
-     * @param integer $id
+     * Displays a single RefUnitOrganisasi model.
+     * @param string $id
      * @return mixed
      */
     public function actionView($id)
     {   
+        if(!$this->cekAkses()){          
+            throw new NotFoundHttpException('You don\'t have access.');
+        }
         $request = Yii::$app->request;
         if($request->isAjax){
             Yii::$app->response->format = Response::FORMAT_JSON;
             return [
-                    'title'=> "RefBidang #".$id,
+                    'title'=> "RefUnitOrganisasi #".$id,
                     'content'=>$this->renderAjax('view', [
                         'model' => $this->findModel($id),
                     ]),
@@ -74,15 +80,18 @@ class BidangController extends Controller
     }
 
     /**
-     * Creates a new RefBidang model.
+     * Creates a new RefUnitOrganisasi model.
      * For ajax request will return json object
      * and for non-ajax request if creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
+        if(!$this->cekAkses()){          
+            throw new NotFoundHttpException('You don\'t have access.');
+        }
         $request = Yii::$app->request;
-        $model = new RefBidang();  
+        $model = new RefUnitOrganisasi();  
 
         if($request->isAjax){
             /*
@@ -91,7 +100,7 @@ class BidangController extends Controller
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($request->isGet){
                 return [
-                    'title'=> "Create new RefBidang",
+                    'title'=> "Create new RefUnitOrganisasi",
                     'content'=>$this->renderAjax('create', [
                         'model' => $model,
                     ]),
@@ -102,15 +111,15 @@ class BidangController extends Controller
             }else if($model->load($request->post()) && $model->save()){
                 return [
                     'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "Create new RefBidang",
-                    'content'=>'<span class="text-success">Create RefBidang success</span>',
+                    'title'=> "Create new RefUnitOrganisasi",
+                    'content'=>'<span class="text-success">Create RefUnitOrganisasi success</span>',
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                             Html::a('Create More',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
         
                 ];         
             }else{           
                 return [
-                    'title'=> "Create new RefBidang",
+                    'title'=> "Create new RefUnitOrganisasi",
                     'content'=>$this->renderAjax('create', [
                         'model' => $model,
                     ]),
@@ -124,7 +133,7 @@ class BidangController extends Controller
             *   Process for non-ajax request
             */
             if ($model->load($request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['view', 'id' => $model->kode_unit]);
             } else {
                 return $this->render('create', [
                     'model' => $model,
@@ -135,14 +144,17 @@ class BidangController extends Controller
     }
 
     /**
-     * Updates an existing RefBidang model.
+     * Updates an existing RefUnitOrganisasi model.
      * For ajax request will return json object
      * and for non-ajax request if update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
+     * @param string $id
      * @return mixed
      */
     public function actionUpdate($id)
     {
+        if(!$this->cekAkses()){          
+            throw new NotFoundHttpException('You don\'t have access.');
+        }
         $request = Yii::$app->request;
         $model = $this->findModel($id);       
 
@@ -153,7 +165,7 @@ class BidangController extends Controller
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($request->isGet){
                 return [
-                    'title'=> "Update RefBidang #".$id,
+                    'title'=> "Update RefUnitOrganisasi #".$id,
                     'content'=>$this->renderAjax('update', [
                         'model' => $model,
                     ]),
@@ -163,7 +175,7 @@ class BidangController extends Controller
             }else if($model->load($request->post()) && $model->save()){
                 return [
                     'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "RefBidang #".$id,
+                    'title'=> "RefUnitOrganisasi #".$id,
                     'content'=>$this->renderAjax('view', [
                         'model' => $model,
                     ]),
@@ -172,7 +184,7 @@ class BidangController extends Controller
                 ];    
             }else{
                  return [
-                    'title'=> "Update RefBidang #".$id,
+                    'title'=> "Update RefUnitOrganisasi #".$id,
                     'content'=>$this->renderAjax('update', [
                         'model' => $model,
                     ]),
@@ -185,7 +197,7 @@ class BidangController extends Controller
             *   Process for non-ajax request
             */
             if ($model->load($request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['view', 'id' => $model->kode_unit]);
             } else {
                 return $this->render('update', [
                     'model' => $model,
@@ -195,14 +207,17 @@ class BidangController extends Controller
     }
 
     /**
-     * Delete an existing RefBidang model.
+     * Delete an existing RefUnitOrganisasi model.
      * For ajax request will return json object
      * and for non-ajax request if deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
+     * @param string $id
      * @return mixed
      */
     public function actionDelete($id)
     {
+        if(!$this->cekAkses()){          
+            throw new NotFoundHttpException('You don\'t have access.');
+        }
         $request = Yii::$app->request;
         $this->findModel($id)->delete();
 
@@ -223,14 +238,17 @@ class BidangController extends Controller
     }
 
      /**
-     * Delete multiple existing RefBidang model.
+     * Delete multiple existing RefUnitOrganisasi model.
      * For ajax request will return json object
      * and for non-ajax request if deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
+     * @param string $id
      * @return mixed
      */
     public function actionBulkDelete()
-    {        
+    {    
+        if(!$this->cekAkses()){          
+            throw new NotFoundHttpException('You don\'t have access.');
+        }    
         $request = Yii::$app->request;
         $pks = explode(',', $request->post( 'pks' )); // Array or selected records primary keys
         foreach ( $pks as $pk ) {
@@ -254,18 +272,27 @@ class BidangController extends Controller
     }
 
     /**
-     * Finds the RefBidang model based on its primary key value.
+     * Finds the RefUnitOrganisasi model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return RefBidang the loaded model
+     * @param string $id
+     * @return RefUnitOrganisasi the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = RefBidang::findOne($id)) !== null) {
+        if (($model = RefUnitOrganisasi::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+    // cek akses user
+    protected function cekAkses(){
+        if(!Yii::$app->user->isGuest && Yii::$app->user->identity->group_id <= 3){
+            return true;
+        }ELSE{
+            return false;
+        }
+    }    
 }

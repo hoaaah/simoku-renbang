@@ -2,6 +2,8 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\date\DatePicker;
+use kartik\select2\Select2;
+use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Ppud */
@@ -27,6 +29,16 @@ use kartik\date\DatePicker;
             ]
         ]) ?>
     </div>
+
+    <?php 
+            echo $form->field($model, 'puud')->widget(Select2::classname(), [
+                'data' => ArrayHelper::map(\app\models\Puus::find()->all(),'id','name'),
+                'options' => ['placeholder' => 'Pilih Kategori PPM ...'],
+                'pluginOptions' => [
+                    'allowClear' => true
+                ],
+            ]);
+    ?>    
 
     <?= $form->field($model, 'no')->textInput(['maxlength' => true]) ?>
 

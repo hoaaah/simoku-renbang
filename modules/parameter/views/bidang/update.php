@@ -3,9 +3,9 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\RefBidang */
+/* @var $model app\models\RefUnitOrganisasi */
 ?>
-<div class="ref-bidang-update">
+<div class="ref-unit-organisasi-update">
 
     <?= $this->render('_form', [
         'model' => $model,

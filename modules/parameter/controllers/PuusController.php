@@ -38,6 +38,9 @@ class PuusController extends Controller
      */
     public function actionIndex()
     {    
+        if(!$this->cekAkses()){          
+            throw new NotFoundHttpException('You don\'t have access.');
+        }    
         $searchModel = new PuusSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -55,6 +58,9 @@ class PuusController extends Controller
      */
     public function actionView($id)
     {   
+        if(!$this->cekAkses()){          
+            throw new NotFoundHttpException('You don\'t have access.');
+        }    
         $request = Yii::$app->request;
         if($request->isAjax){
             Yii::$app->response->format = Response::FORMAT_JSON;
@@ -81,6 +87,9 @@ class PuusController extends Controller
      */
     public function actionCreate()
     {
+        if(!$this->cekAkses()){          
+            throw new NotFoundHttpException('You don\'t have access.');
+        }    
         $request = Yii::$app->request;
         $model = new Puus();  
 
@@ -143,6 +152,9 @@ class PuusController extends Controller
      */
     public function actionUpdate($id)
     {
+        if(!$this->cekAkses()){          
+            throw new NotFoundHttpException('You don\'t have access.');
+        }    
         $request = Yii::$app->request;
         $model = $this->findModel($id);       
 
@@ -203,6 +215,9 @@ class PuusController extends Controller
      */
     public function actionDelete($id)
     {
+        if(!$this->cekAkses()){          
+            throw new NotFoundHttpException('You don\'t have access.');
+        }    
         $request = Yii::$app->request;
         $this->findModel($id)->delete();
 
@@ -231,6 +246,9 @@ class PuusController extends Controller
      */
     public function actionBulkDelete()
     {        
+        if(!$this->cekAkses()){          
+            throw new NotFoundHttpException('You don\'t have access.');
+        }    
         $request = Yii::$app->request;
         $pks = explode(',', $request->post( 'pks' )); // Array or selected records primary keys
         foreach ( $pks as $pk ) {
@@ -268,4 +286,13 @@ class PuusController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+    // cek akses user
+    protected function cekAkses(){
+        if(!Yii::$app->user->isGuest && Yii::$app->user->identity->group_id <= 1){
+            return true;
+        }ELSE{
+            return false;
+        }
+    }    
 }

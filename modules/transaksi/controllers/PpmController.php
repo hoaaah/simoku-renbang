@@ -41,9 +41,15 @@ class PpmController extends Controller
      */
     public function actionIndex()
     {    
+        if(!$this->cekAkses()){          
+            throw new NotFoundHttpException('You don\'t have access.');
+        }
         $searchModel = new PpudSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->query->andWhere(['puud' => Yii::$app->params['id_ppm']]);
+        // $dataProvider->query->andWhere(['puud' => Yii::$app->params['id_ppm']]);
+        if(Yii::$app->user->identity->id && $user_id = Yii::$app->user->identity->id){
+            $dataProvider->query->andWhere(['user_id' => $user_id ]);
+        }
         $dataProvider->query->orderBy('id DESC');
 
         return $this->render('index', [
@@ -54,6 +60,9 @@ class PpmController extends Controller
 
     public function actionPeserta($id)
     {   
+        if(!$this->cekAkses()){          
+            throw new NotFoundHttpException('You don\'t have access.');
+        }
         $model = $this->findModel($id);
         $searchModel = new TpesertaSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -74,6 +83,9 @@ class PpmController extends Controller
 
     public function actionView($id)
     {   
+        if(!$this->cekAkses()){          
+            throw new NotFoundHttpException('You don\'t have access.');
+        }
         $request = Yii::$app->request;
         if($request->isAjax){
             Yii::$app->response->format = Response::FORMAT_JSON;
@@ -100,9 +112,12 @@ class PpmController extends Controller
      */
     public function actionCreate()
     {
+        if(!$this->cekAkses()){          
+            throw new NotFoundHttpException('You don\'t have access.');
+        }
         $request = Yii::$app->request;
         $model = new Ppud();  
-        $model->puud = Yii::$app->params['id_ppm'];
+        // $model->puud = Yii::$app->params['id_ppm'];
         $model->tahun = date('Y');
         $model->user_id = Yii::$app->user->identity->id;
 
@@ -185,6 +200,9 @@ class PpmController extends Controller
      */
     public function actionUpdate($id)
     {
+        if(!$this->cekAkses()){          
+            throw new NotFoundHttpException('You don\'t have access.');
+        }
         $request = Yii::$app->request;
         $model = $this->findModel($id);
         $model->user_id = Yii::$app->user->identity->id;
@@ -273,6 +291,9 @@ class PpmController extends Controller
      */
     public function actionDelete($id)
     {
+        if(!$this->cekAkses()){          
+            throw new NotFoundHttpException('You don\'t have access.');
+        }
         $request = Yii::$app->request;
         $model = $this->findModel($id); 
         $path = Yii::getAlias('@upload') . '/' . $model->puud.'/'.$model->files;
@@ -305,7 +326,10 @@ class PpmController extends Controller
      * @return mixed
      */
     public function actionBulkDelete()
-    {        
+    {    
+        if(!$this->cekAkses()){          
+            throw new NotFoundHttpException('You don\'t have access.');
+        }    
         $request = Yii::$app->request;
         $pks = explode(',', $request->post( 'pks' )); // Array or selected records primary keys
         foreach ( $pks as $pk ) {
@@ -345,4 +369,13 @@ class PpmController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+    // cek akses user
+    protected function cekAkses(){
+        if(!Yii::$app->user->isGuest && Yii::$app->user->identity->group_id <= 4){
+            return true;
+        }ELSE{
+            return false;
+        }
+    }    
 }

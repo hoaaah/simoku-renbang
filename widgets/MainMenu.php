@@ -1,6 +1,20 @@
 <?php
 
 /* (C) Copyright 2017 Heru Arief Wijaya (http://belajararief.com/) untuk Renbang Biro Kepegawaian BPKP.*/
+/* Mapping of Menu and access group
+	            Administrator (1)	Supervisor (2)	User Kanpus (3)	User Unit (4)
+Parameter				
+  Bidang/ Unitorg	1						1				1				0
+  Kategori Data		1						0				0				0
+  Peran PPM			1						0				0				0
+  User				1						0				0				0
+Transaksi				
+  PPM				1						1				1				1
+Laporan				
+  Laporan Unit		0						0				0				1
+  Laporan Kompilasi	1						1				1				0
+
+*/
 
 namespace app\widgets;
 
@@ -17,9 +31,14 @@ use yii\bootstrap\Widget;
  */
 class MainMenu extends Widget {
 
-	/**
-	 * {@inheritdoc}
-	 */
+	protected function visibility($group_id){
+		if(Yii::$app->user->identity->group_id <= $group_id){
+			return true;
+		}ELSE{
+			return false;
+		}
+	}
+
 	public function run() {
 		NavBar::begin([
 			'brandLabel' => Yii::$app->name,
@@ -35,10 +54,7 @@ class MainMenu extends Widget {
 		NavBar::end();
 	}
 
-	/**
-	 * Generate items list for menu.
-	 * @return array
-	 */
+	
 	protected function getItems() {
 		$items = [
 			['label' => 'Home', 'url' => ['/site/index']],
@@ -51,22 +67,22 @@ class MainMenu extends Widget {
 		} else {
 			$items[] = ['label' => 'Parameter', 
 				'items' => [
-					['label' => 'Bidang', 'url' => ['/parameter/bidang']],
-					['label' => 'Kategori Data Bidang', 'url' => ['/parameter/kategori']],
-					['label' => 'Pegawai', 'url' => ['/parameter/pegawai']],
-					['label' => 'Kategori Data', 'url' => ['/parameter/puus']],
-					['label' => 'Peran PPM', 'url' => ['/parameter/peran']],
+					['label' => 'Bidang', 'url' => ['/parameter/bidang'], 'visible' => $this->visibility(3)],
+					// ['label' => 'Kategori Data Bidang', 'url' => ['/parameter/kategori']],
+					// ['label' => 'Pegawai', 'url' => ['/parameter/pegawai']],
+					['label' => 'Kategori Data', 'url' => ['/parameter/puus'], 'visible' => $this->visibility(1)],
+					['label' => 'Peran PPM', 'url' => ['/parameter/peran'], 'visible' => $this->visibility(1)],
 					// ['label' => 'Location', 'url' => ['/location']],
 					// ['label' => 'News and Articles', 'url' => ['/articles']],
-					['label' => 'User', 'url' => ['/parameter/user'] ],
+					['label' => 'User', 'url' => ['/parameter/user'], 'visible' => $this->visibility(1) ],
 				]
 			];
 
 			$items[] = ['label' => 'Transaksi', 
 				'items' => [
-					['label' => 'PPM', 'url' => ['/transaksi/ppm']],
+					['label' => 'PPM', 'url' => ['/transaksi/ppm'], 'visible' => $this->visibility(4)],
 					// ['label' => 'Portofolio', 'url' => ['/portofolio']],
-					['label' => 'About', 'url' => '#' ],
+					// ['label' => 'About', 'url' => '#' ],
 					// ['label' => 'Team Member', 'url' => ['/team']],
 					// ['label' => 'Partner', 'url' => ['/partner']],
 					// ['label' => 'Location', 'url' => ['/location']],
@@ -76,15 +92,9 @@ class MainMenu extends Widget {
 
 			$items[] = ['label' => 'Laporan', 
 				'items' => [
-					// ['label' => 'PPM', 'url' => ['/transaksi/ppm']],
-					// ['label' => 'Portofolio', 'url' => ['/portofolio']],
-					['label' => 'Laporan Individu', 'url' => '#' ],
-					// ['label' => 'Team Member', 'url' => ['/team']],
-					// ['label' => 'Partner', 'url' => ['/partner']],
-					// ['label' => 'Location', 'url' => ['/location']],
-					// ['label' => 'News and Articles', 'url' => ['/articles']],
-				]
-			];	
+					['label' => 'Laporan Unit', 'url' => ['/portofolio'], 'visible' => $this->visibility(4)],
+					['label' => 'Laporan Kompilasi', 'url' => '#', 'visible' => $this->visibility(3)],
+			]];	
 			$items[] = Html::tag('li', $this->getLogoutButton());					
 		}
 

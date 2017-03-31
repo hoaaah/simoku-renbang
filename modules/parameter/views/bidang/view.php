@@ -3,16 +3,15 @@
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\RefBidang */
+/* @var $model app\models\RefUnitOrganisasi */
 ?>
-<div class="ref-bidang-view">
+<div class="ref-unit-organisasi-view">
  
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
-            'name',
-            'keterangan',
+            'kode_unit',
+            'nama_unit',
         ],
     ]) ?>
 
