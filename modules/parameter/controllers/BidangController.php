@@ -65,7 +65,7 @@ class BidangController extends Controller
         if($request->isAjax){
             Yii::$app->response->format = Response::FORMAT_JSON;
             return [
-                    'title'=> "RefUnitOrganisasi #".$id,
+                    'title'=> "Unit Organisasi #".$id,
                     'content'=>$this->renderAjax('view', [
                         'model' => $this->findModel($id),
                     ]),
@@ -100,7 +100,7 @@ class BidangController extends Controller
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($request->isGet){
                 return [
-                    'title'=> "Create new RefUnitOrganisasi",
+                    'title'=> "Tambah Unit Organisasi",
                     'content'=>$this->renderAjax('create', [
                         'model' => $model,
                     ]),
@@ -111,7 +111,7 @@ class BidangController extends Controller
             }else if($model->load($request->post()) && $model->save()){
                 return [
                     'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "Create new RefUnitOrganisasi",
+                    'title'=> "Tambah Unit Organisasi",
                     'content'=>'<span class="text-success">Create RefUnitOrganisasi success</span>',
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                             Html::a('Create More',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
@@ -119,7 +119,7 @@ class BidangController extends Controller
                 ];         
             }else{           
                 return [
-                    'title'=> "Create new RefUnitOrganisasi",
+                    'title'=> "Tambah Unit Organisasi",
                     'content'=>$this->renderAjax('create', [
                         'model' => $model,
                     ]),
@@ -165,7 +165,7 @@ class BidangController extends Controller
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($request->isGet){
                 return [
-                    'title'=> "Update RefUnitOrganisasi #".$id,
+                    'title'=> "Ubah Unit Organisasi #".$id,
                     'content'=>$this->renderAjax('update', [
                         'model' => $model,
                     ]),
@@ -175,7 +175,7 @@ class BidangController extends Controller
             }else if($model->load($request->post()) && $model->save()){
                 return [
                     'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "RefUnitOrganisasi #".$id,
+                    'title'=> "UnitOrganisasi #".$id,
                     'content'=>$this->renderAjax('view', [
                         'model' => $model,
                     ]),
@@ -184,7 +184,7 @@ class BidangController extends Controller
                 ];    
             }else{
                  return [
-                    'title'=> "Update RefUnitOrganisasi #".$id,
+                    'title'=> "Ubah Unit Organisasi #".$id,
                     'content'=>$this->renderAjax('update', [
                         'model' => $model,
                     ]),

@@ -109,7 +109,7 @@ class UserController extends Controller
         
                 ];         
             }else if($model->load($request->post())){
-                $model->setPassword($model->password);
+                $model->password_hash = Yii::$app->security->generatePasswordHash($model->password);
                 $model->generateAuthKey();
                 $model->status = 10;
                 if($model->save()){
@@ -138,7 +138,7 @@ class UserController extends Controller
             *   Process for non-ajax request
             */
             if ($model->load($request->post()) && $model->save()) {
-                $model->setPassword($model->password);
+                $model->password_hash = Yii::$app->security->generatePasswordHash($model->password);
                 $model->generateAuthKey();
                 $model->status = 10;
                 if($model->save()) return $this->redirect(['view', 'id' => $model->id]);
@@ -181,7 +181,7 @@ class UserController extends Controller
                                 Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
                 ];         
             }else if($model->load($request->post())){
-                $model->setPassword($model->password);
+                $model->password_hash = Yii::$app->security->generatePasswordHash($model->password);
                 $model->generateAuthKey();
                 $model->status = 10;
                 if($model->save()){                
@@ -210,7 +210,7 @@ class UserController extends Controller
             *   Process for non-ajax request
             */
             if ($model->load($request->post())) {
-                $model->setPassword($model->password);
+                $model->password_hash = Yii::$app->security->generatePasswordHash($model->password);
                 $model->generateAuthKey();
                 $model->status = 10;
                 if($model->save()) return $this->redirect(['view', 'id' => $model->id]);

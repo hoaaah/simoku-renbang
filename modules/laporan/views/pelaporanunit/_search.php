@@ -38,7 +38,7 @@ use kartik\widgets\DatePicker;
     </div>
     <div class="col-md-3">
         <?php
-            if(Yii::$app->request->queryParams['Laporan']['kode_pegawai']) $model->kode_pegawai = Yii::$app->request->queryParams['Laporan']['kode_pegawai'];
+            if(isset(Yii::$app->request->queryParams['Laporan']['kode_pegawai'])) $model->kode_pegawai = Yii::$app->request->queryParams['Laporan']['kode_pegawai'];
             $queryData = \app\models\Pegawai::find();
             if(Yii::$app->user->identity->kode_unit){
                 $queryData->where(['s_kd_instansiunitorg' => Yii::$app->user->identity->kode_unit]);

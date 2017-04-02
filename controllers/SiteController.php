@@ -79,6 +79,10 @@ class SiteController extends Controller {
 		if ($model->load(Yii::$app->request->post()) && $model->login()) {
 			return $this->goBack();
 		}
+		// IF($model->load(Yii::$app->request->post())){
+		// 	var_dump($model);
+		// 	var_dump($model->login());
+		// }
 		return $this->render('login', [
 					'model' => $model,
 		]);

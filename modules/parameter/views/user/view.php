@@ -6,7 +6,9 @@ use yii\widgets\DetailView;
 /* @var $model app\models\User */
 ?>
 <div class="user-view">
- 
+<?php
+print_r(Yii::$app->security->validatePassword('adminadmin', $model->password_hash));
+?>
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [

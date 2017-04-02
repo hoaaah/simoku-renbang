@@ -26,6 +26,12 @@ return [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'unit.nama_unit',
     ],
+    // [
+    //     'label' => 'cek',
+    //     'value' => function($model){
+    //         return Yii::$app->security->validatePassword('sumselsumsel', $model->password_hash);
+    //     }
+    // ],
     [
         'class' => 'kartik\grid\ActionColumn',
         'dropdown' => false,

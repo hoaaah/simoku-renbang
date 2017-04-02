@@ -15,7 +15,7 @@ use yii\web\IdentityInterface;
  *
  * @author Heru Arief Wijaya <heru@belajararief.com>
  */
-class User extends ActiveRecord implements IdentityInterface {
+class User extends UserIdentity {
 
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
@@ -52,30 +52,12 @@ class User extends ActiveRecord implements IdentityInterface {
             ['password', 'required', 'on' => 'create'],
             [['status', 'group_id'], 'integer'],
             [['passwordlama', 'kode_unit'], 'string' ],
-            ['skpd', 'string'],
             ['status', 'required'],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],            
         ];
     }
 
-    /**
-     * Returns a list of behaviors that this component should behave as.
-     *
-     * @return array
-     */
-    public function behaviors()
-    {
-        return [
-            TimestampBehavior::className(),
-        ];
-    }
-
-    /**
-     * Returns the attribute labels.
-     *
-     * @return array
-     */
     public function attributeLabels()
     {
         return [
@@ -91,45 +73,67 @@ class User extends ActiveRecord implements IdentityInterface {
         ];
     }
 
-    public function getUnit()
-    {
-        return $this->hasOne(\app\models\RefUnitOrganisasi::className(), ['kode_unit' => 'kode_unit']);
-    }    
-
-    public function getGroup()
-    {
-        return $this->hasOne(\app\models\Groups::className(), ['id' => 'group_id']);
-    }        
-
-    public static function findIdentity($id)
-    {
-        return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
-    }
 
     /**
-     * @inheritdoc
-     */
-    public static function findIdentityByAccessToken($token, $type = null)
-    {
-        throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
-    }
-
-    /**
-     * Finds user by username
+     * Set password rule based on our setting value (Force Strong Password).
      *
-     * @param string $username
+     * @return array Password strength rule.
+     */
+    private function passwordStrengthRule()
+    {
+        // get setting value for 'Force Strong Password'
+        $fsp = Yii::$app->params['fsp'];
+
+        // password strength rule is determined by StrengthValidator 
+        // presets are located in: vendor/kartik-v/yii2-password/presets.php
+        $strong = [['password'], StrengthValidator::className(), 'preset'=>'normal'];
+
+        // normal yii rule
+        $normal = ['password', 'string', 'min' => 6];
+
+        // if 'Force Strong Password' is set to 'true' use $strong rule, else use $normal rule
+        return ($fsp) ? $strong : $normal;
+    }
+
+
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::className(),
+        ];
+    }   
+
+//------------------------------------------------------------------------------------------------//
+// USER FINDERS
+//------------------------------------------------------------------------------------------------//
+
+    /**
+     * Finds user by username.
+     *
+     * @param  string $username
      * @return static|null
      */
     public static function findByUsername($username)
     {
-        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
-    }
+        return static::findOne(['username' => $username]);
+    }  
+    
+    /**
+     * Finds user by email.
+     *
+     * @param  string $email
+     * @return static|null
+     */
+    public static function findByEmail($email)
+    {
+        return static::findOne(['email' => $email]);
+    } 
 
     /**
-     * Finds user by password reset token
+     * Finds user by password reset token.
      *
-     * @param string $token password reset token
-     * @return static|null
+     * @param  string $token Password reset token.
+     * @return null|static
      */
     public static function findByPasswordResetToken($token)
     {
@@ -139,14 +143,60 @@ class User extends ActiveRecord implements IdentityInterface {
 
         return static::findOne([
             'password_reset_token' => $token,
-            'status' => self::STATUS_ACTIVE,
+            'status' => User::STATUS_ACTIVE,
         ]);
     }
 
     /**
-     * Finds out if password reset token is valid
+     * Finds user by account activation token.
      *
-     * @param string $token password reset token
+     * @param  string $token Account activation token.
+     * @return static|null
+     */
+    public static function findByAccountActivationToken($token)
+    {
+        return static::findOne([
+            'account_activation_token' => $token,
+            'status' => User::STATUS_INACTIVE,
+        ]);
+    }
+
+  
+//------------------------------------------------------------------------------------------------//
+// HELPERS
+//------------------------------------------------------------------------------------------------//
+
+    /**
+     * Returns the user status in nice format.
+     *
+     * @param  integer $status Status integer value.
+     * @return string          Nicely formatted status.
+     */
+    public function getStatusName($status)
+    {
+        return $this->statusList[$status];
+    }
+
+    /**
+     * Generates new password reset token.
+     */
+    public function generatePasswordResetToken()
+    {
+        $this->password_reset_token = Yii::$app->security->generateRandomString() . '_' . time();
+    }
+    
+    /**
+     * Removes password reset token.
+     */
+    public function removePasswordResetToken()
+    {
+        $this->password_reset_token = null;
+    }
+
+    /**
+     * Finds out if password reset token is valid.
+     * 
+     * @param  string $token Password reset token.
      * @return bool
      */
     public static function isPasswordResetTokenValid($token)
@@ -161,72 +211,19 @@ class User extends ActiveRecord implements IdentityInterface {
     }
 
     /**
-     * @inheritdoc
+     * Generates new account activation token.
      */
-    public function getId()
+    public function generateAccountActivationToken()
     {
-        return $this->getPrimaryKey();
+        $this->account_activation_token = Yii::$app->security->generateRandomString() . '_' . time();
     }
 
     /**
-     * @inheritdoc
+     * Removes account activation token.
      */
-    public function getAuthKey()
+    public function removeAccountActivationToken()
     {
-        return $this->auth_key;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function validateAuthKey($authKey)
-    {
-        return $this->getAuthKey() === $authKey;
-    }
-
-    /**
-     * Validates password
-     *
-     * @param string $password password to validate
-     * @return bool if password provided is valid for current user
-     */
-    public function validatePassword($password)
-    {
-        return Yii::$app->security->validatePassword($password, $this->password_hash);
-    }
-
-    /**
-     * Generates password hash from password and sets it to the model
-     *
-     * @param string $password
-     */
-    public function setPassword($password)
-    {
-        $this->password_hash = Yii::$app->security->generatePasswordHash($password);
-    }
-
-    /**
-     * Generates "remember me" authentication key
-     */
-    public function generateAuthKey()
-    {
-        $this->auth_key = Yii::$app->security->generateRandomString();
-    }
-
-    /**
-     * Generates new password reset token
-     */
-    public function generatePasswordResetToken()
-    {
-        $this->password_reset_token = Yii::$app->security->generateRandomString() . '_' . time();
-    }
-
-    /**
-     * Removes password reset token
-     */
-    public function removePasswordResetToken()
-    {
-        $this->password_reset_token = null;
+        $this->account_activation_token = null;
     }
 
 }

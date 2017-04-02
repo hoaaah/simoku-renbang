@@ -57,16 +57,10 @@ class LoginForm extends Model {
 	 * @return boolean Whether the user is logged in successfully.
 	 */
 	public function login() {
-		var_dump($this->getUser());
-		if(Yii::$app->security->validatePassword($this->password, $this->getUser()->password_hash)){
-			var_dump('Hore');
-			// return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 1 * 1 * 1 : 0);
+		if ($this->validate()) {
+			return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600 * 24 * 30 : 0);
 		}
-
-		// if ($this->validate()) {
-		// 	return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600 * 24 * 30 : 0);
-		// }
-		// return false;
+		return false;
 	}
 
 	/**

@@ -65,7 +65,7 @@ class PuusController extends Controller
         if($request->isAjax){
             Yii::$app->response->format = Response::FORMAT_JSON;
             return [
-                    'title'=> "Puus #".$id,
+                    'title'=> "Kategori Data #".$id,
                     'content'=>$this->renderAjax('view', [
                         'model' => $this->findModel($id),
                     ]),
@@ -100,7 +100,7 @@ class PuusController extends Controller
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($request->isGet){
                 return [
-                    'title'=> "Create new Puus",
+                    'title'=> "Tambah Kategori Data",
                     'content'=>$this->renderAjax('create', [
                         'model' => $model,
                     ]),
@@ -111,7 +111,7 @@ class PuusController extends Controller
             }else if($model->load($request->post()) && $model->save()){
                 return [
                     'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "Create new Puus",
+                    'title'=> "Tambah Kategori Data",
                     'content'=>'<span class="text-success">Create Puus success</span>',
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                             Html::a('Create More',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
@@ -119,7 +119,7 @@ class PuusController extends Controller
                 ];         
             }else{           
                 return [
-                    'title'=> "Create new Puus",
+                    'title'=> "Tambah Kategori Data",
                     'content'=>$this->renderAjax('create', [
                         'model' => $model,
                     ]),
@@ -165,7 +165,7 @@ class PuusController extends Controller
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($request->isGet){
                 return [
-                    'title'=> "Update Puus #".$id,
+                    'title'=> "Ubah Kategori Data #".$id,
                     'content'=>$this->renderAjax('update', [
                         'model' => $model,
                     ]),
@@ -175,7 +175,7 @@ class PuusController extends Controller
             }else if($model->load($request->post()) && $model->save()){
                 return [
                     'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "Puus #".$id,
+                    'title'=> "Kategori Data #".$id,
                     'content'=>$this->renderAjax('view', [
                         'model' => $model,
                     ]),
@@ -184,7 +184,7 @@ class PuusController extends Controller
                 ];    
             }else{
                  return [
-                    'title'=> "Update Puus #".$id,
+                    'title'=> "Ubah Kategori Data #".$id,
                     'content'=>$this->renderAjax('update', [
                         'model' => $model,
                     ]),

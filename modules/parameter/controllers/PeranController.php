@@ -65,7 +65,7 @@ class PeranController extends Controller
         if($request->isAjax){
             Yii::$app->response->format = Response::FORMAT_JSON;
             return [
-                    'title'=> "RperanPpm #".$id,
+                    'title'=> "Peran PPM #".$id,
                     'content'=>$this->renderAjax('view', [
                         'model' => $this->findModel($id),
                     ]),
@@ -100,7 +100,7 @@ class PeranController extends Controller
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($request->isGet){
                 return [
-                    'title'=> "Create new RperanPpm",
+                    'title'=> "Tambah Peran PPM",
                     'content'=>$this->renderAjax('create', [
                         'model' => $model,
                     ]),
@@ -111,7 +111,7 @@ class PeranController extends Controller
             }else if($model->load($request->post()) && $model->save()){
                 return [
                     'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "Create new RperanPpm",
+                    'title'=> "Tambah Peran PPM",
                     'content'=>'<span class="text-success">Create RperanPpm success</span>',
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                             Html::a('Create More',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
@@ -119,7 +119,7 @@ class PeranController extends Controller
                 ];         
             }else{           
                 return [
-                    'title'=> "Create new RperanPpm",
+                    'title'=> "Tambah Peran PPM",
                     'content'=>$this->renderAjax('create', [
                         'model' => $model,
                     ]),
@@ -165,7 +165,7 @@ class PeranController extends Controller
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($request->isGet){
                 return [
-                    'title'=> "Update RperanPpm #".$id,
+                    'title'=> "Ubah Peran PPM #".$id,
                     'content'=>$this->renderAjax('update', [
                         'model' => $model,
                     ]),
@@ -175,7 +175,7 @@ class PeranController extends Controller
             }else if($model->load($request->post()) && $model->save()){
                 return [
                     'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "RperanPpm #".$id,
+                    'title'=> "Peran PPM #".$id,
                     'content'=>$this->renderAjax('view', [
                         'model' => $model,
                     ]),
@@ -184,7 +184,7 @@ class PeranController extends Controller
                 ];    
             }else{
                  return [
-                    'title'=> "Update RperanPpm #".$id,
+                    'title'=> "Ubah Peran PPM #".$id,
                     'content'=>$this->renderAjax('update', [
                         'model' => $model,
                     ]),
