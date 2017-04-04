@@ -112,17 +112,6 @@ class PelaporanunitController extends Controller
 //---------------------------------------------------------------------------------------------------------------------------------------------------
     public function actionCetak()
     {
-        IF($this->cekakses() !== true){
-            Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
-            return $this->redirect(Yii::$app->request->referrer);
-        }    
-        IF(Yii::$app->session->get('tahun'))
-        {
-            $Tahun = Yii::$app->session->get('tahun');
-        }ELSE{
-            $Tahun = DATE('Y');
-        }
-
         $get = new \app\models\Laporan();
         $Kd_Laporan = NULL;
         $data = NULL;
@@ -139,6 +128,34 @@ class PelaporanunitController extends Controller
             IF($getparam['Laporan']['Kd_Laporan']){
                 $Kd_Laporan = Yii::$app->request->queryParams['Laporan']['Kd_Laporan'];
                 switch ($Kd_Laporan) {
+                    case 1:
+                        $query = \app\models\Tpeserta::find();
+                        IF($getparam['Laporan']['kode_pegawai']){
+                            $query->andWhere(['pegawai_id' => $getparam['Laporan']['kode_pegawai']]);
+                        }
+                        IF($getparam['Laporan']['Tgl_1']){
+                            $ppm = \app\models\Ppud::find()->andWhere('tetap_tanggal >= "'.$getparam['Laporan']['Tgl_1'].'" AND tetap_tanggal <= "'.$getparam['Laporan']['Tgl_2'].'"')->all();
+                            // $listPpm = [];
+                            // var_dump($ppm);
+                            foreach($ppm as $ppm){
+                                $listPpm[] = $ppm->id;
+                                $inPpm = '('.implode(',', $listPpm).')';
+                            }
+                            IF($listPpm != NULL){
+                                $query->andWhere("ppm_id IN $inPpm");
+                            }
+                        }
+                        $data = $query;
+                        $render = 'cetaklaporan1';
+                        break;
+                      case 2:
+                        $query = \app\models\Ppud::find();
+                        IF($getparam['Laporan']['Tgl_1']){
+                            $query->andWhere('tetap_tanggal >= "'.$getparam['Laporan']['Tgl_1'].'" AND tetap_tanggal <= "'.$getparam['Laporan']['Tgl_2'].'"');
+                        }
+                        $data = $query;
+                        $render = 'cetaklaporan2';
+                        break;                    
                     default:
                         # code...
                         break;
@@ -146,14 +163,6 @@ class PelaporanunitController extends Controller
             }
 
         }
-
-        $peraturan = \app\models\TaRkasPeraturan::findOne([
-                            'tahun' => $Tahun,
-                            'perubahan_id' => $getparam['Laporan']['perubahan_id'],
-                            'sekolah_id' => Yii::$app->user->identity->sekolah_id,
-                            ]);
-        $references = \app\models\TaTh::findOne(['tahun' => $Tahun]);
-
         return $this->render($render, [
             'get' => $get,
             'Kd_Laporan' => $Kd_Laporan,
@@ -166,9 +175,6 @@ class PelaporanunitController extends Controller
             'data6' => $data6,
             'render' => $render,
             'getparam' => $getparam,
-            'Tahun' => $Tahun,
-            'peraturan' => $peraturan,
-            'ref' => $references
         ]);
     }  
 }
